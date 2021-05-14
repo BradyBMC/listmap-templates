@@ -23,8 +23,8 @@ class listmap {
       less_t less;
       struct node;
       struct link {
-         node* next{};
-         node* prev{};
+         node* next{nullptr};
+         node* prev{nullptr};
          link (node* next_, node* prev_): next(next_), prev(prev_){}
       };
       struct node: link {
@@ -36,7 +36,7 @@ class listmap {
       link anchor_ {anchor(), anchor()};
    public:
       class iterator;
-      listmap(){};
+      listmap(){anchor_.prev=nullptr; anchor_.next=nullptr;};
       listmap (const listmap&);
       listmap& operator= (const listmap&);
       ~listmap();
