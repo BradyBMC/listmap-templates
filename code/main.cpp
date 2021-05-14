@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
+#include <regex>
+#include <cassert>
 
 using namespace std;
 
@@ -35,7 +37,39 @@ void scan_options (int argc, char** argv) {
 int main (int argc, char** argv) {
    sys_info::execname (argv[0]);
    scan_options (argc, argv);
+   
+   regex comment_regex {R"(^\s*(#.*)?$)"};
+   regex key_value_regex {R"(^\s*(.*?)\s*=\s*(.*?)\s*$)"};
+   regex trimmed_regex {R"(^\s*([^=]+?)\s*$)"};
+   int run = 0;
+   str_str_map test;
+   for (;;) {
+      string line;
+      getline (cin, line);
+      if (cin.eof()) break;
+      cout << "input: \"" << line << "\"" << endl;
+      smatch result;
+      if (regex_search (line, result, comment_regex)) {
+         cout << "Comment or empty line." << endl;
+      }else if (regex_search (line, result, key_value_regex)) {
+         cout << "key  : \"" << result[1] << "\"" << endl;
+         cout << "value: \"" << result[2] << "\"" << endl;
+         string temp = result[1];
+         string temp2= result[2];
+         str_str_pair pair (result[1], result[2]);
+         cout << pair << endl;
+         test.insert(pair);
+      }else if (regex_search (line, result, trimmed_regex)) {
+         cout << "query: \"" << result[1] << "\"" << endl;
+      }else {
+         assert (false and "This can not happen.");
+      }
+      run++;
+      if(run == 3) break;
+   }
 
+
+   /*
    str_str_map test;
    cout << test << endl;
    for (char** argp = &argv[optind]; argp != &argv[argc]; ++argp) {
@@ -52,7 +86,7 @@ int main (int argc, char** argv) {
 
    str_str_map::iterator itor = test.begin();
    test.erase (itor);
-
+   */
    cout << "EXIT_SUCCESS" << endl;
    return EXIT_SUCCESS;
 }
