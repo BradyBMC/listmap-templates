@@ -68,7 +68,7 @@ class listmap<key_t,mapped_t,less_t>::iterator {
       bool operator== (const iterator& that) const {
          return this->where == that.where;
       }
-      node* get() {return where;}
+      listmap<key_t,mapped_t,less_t>::node* get() {return where;}
       bool operator!= (const iterator& that) const {
          return this->where != that.where;
       }

@@ -37,16 +37,41 @@ void scan_options (int argc, char** argv) {
 }
 
 void catfile(istream& infile, const string& filename) {
+  regex comment_regex {R"(^\s*(#.*)?$)"};
+  regex key_value_regex {R"(^\s*(.*?)\s*=\s*(.*?)\s*$)"};
+  regex trimmed_regex {R"(^\s*([^=]+?)\s*$)"};
+
+  str_str_map test;
+
   cout << filename << endl;
   for(;;) {
     string line;
-    getline(infile,line);
-    if(infile.eof()) break;
-    cout << line << endl;
+    getline (cin, line);
+    if (infile.eof()) break;
+    cout << "input: \"" << line << "\"" << endl;
+    smatch result;
+    if (regex_search (line, result, comment_regex)) {
+       cout << "Comment or empty line." << endl;
+    }else if (regex_search (line, result, key_value_regex)) {
+       cout << "key  : \"" << result[1] << "\"" << endl;
+       cout << "value: \"" << result[2] << "\"" << endl;
+       str_str_pair pair (result[1], result[2]);
+       cout << pair << endl;
+       test.insert(pair);
+    }else if (regex_search (line, result, trimmed_regex)) {
+       cout << "query: \"" << result[1] << "\"" << endl;
+       auto it = test.find(result[1]);
+       cout << (*it).second << endl;
+    }else {
+       assert (false and "This can not happen.");
+    }
   }
 }
 
 int main (int argc, char** argv) {
+
+
+
   int status = 0;
   string progname(basename(argv[0]));
   vector<string> filenames(&argv[1], &argv[argc]);
@@ -57,6 +82,8 @@ int main (int argc, char** argv) {
       ifstream infile (filename);
       if(infile.fail()) {
         status = 1;
+        cerr << progname << ": " << filename <<": " 
+        << strerror(errno) << endl;
       } else {
         catfile(infile,filename);
         infile.close();
@@ -120,6 +147,6 @@ int main (int argc, char** argv) {
    test.erase (itor);
    */
    cout << "EXIT_SUCCESS" << endl;
-   return EXIT_SUCCESS;
+   return status;
 }
 
