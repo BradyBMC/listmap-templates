@@ -7,6 +7,8 @@
 #include <unistd.h>
 #include <regex>
 #include <cassert>
+#include <fstream>
+
 
 using namespace std;
 
@@ -34,7 +36,37 @@ void scan_options (int argc, char** argv) {
    }
 }
 
+void catfile(istream& infile, const string& filename) {
+  cout << filename << endl;
+  for(;;) {
+    string line;
+    getline(infile,line);
+    if(infile.eof()) break;
+    cout << line << endl;
+  }
+}
+
 int main (int argc, char** argv) {
+  int status = 0;
+  string progname(basename(argv[0]));
+  vector<string> filenames(&argv[1], &argv[argc]);
+  if(filenames.size()==0) filenames.push_back("-");
+  for(const auto& filename: filenames) {
+    if(filename == "-") catfile(cin,filename);
+    else {
+      ifstream infile (filename);
+      if(infile.fail()) {
+        status = 1;
+      } else {
+        catfile(infile,filename);
+        infile.close();
+      }
+    }
+  }
+
+
+
+   /*
    sys_info::execname (argv[0]);
    scan_options (argc, argv);
    
@@ -67,7 +99,7 @@ int main (int argc, char** argv) {
       run++;
       if(run == 3) break;
    }
-
+   */
 
    /*
    str_str_map test;
