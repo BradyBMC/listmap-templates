@@ -14,6 +14,10 @@
 //
 template <typename key_t, typename mapped_t, class less_t>
 listmap<key_t,mapped_t,less_t>::~listmap() {
+   while(begin()!=end()) {
+     erase(++begin());
+   }
+   //Idk if it has to remove anchor?"
    DEBUGF ('l', reinterpret_cast<const void*> (this));
 }
 
@@ -42,14 +46,14 @@ listmap<key_t,mapped_t,less_t>::insert (const value_type& pair) {
        node *n_ptr = new node(curr.get(),curr.get()->prev,pair);
        curr.get()->prev->next = n_ptr;
        curr.get()->prev = n_ptr;
-       break; 
+       return n_ptr;
      }
      ++curr;
      if(curr == end()) {
        node *n_ptr = new node(curr.get(),curr.get()->prev,pair);
        curr.get()->prev->next = n_ptr;
        curr.get()->prev = n_ptr;
-       break;
+       return n_ptr;
      }
    }
    DEBUGF ('l', &pair << "->" << pair);
@@ -62,8 +66,13 @@ listmap<key_t,mapped_t,less_t>::insert (const value_type& pair) {
 template <typename key_t, typename mapped_t, class less_t>
 typename listmap<key_t,mapped_t,less_t>::iterator
 listmap<key_t,mapped_t,less_t>::find (const key_type& that) {
+   iterator curr = begin();
+   while(curr != end()) {
+     if(curr.get()->value.first == that) {break;}
+     ++curr;
+   }
    DEBUGF ('l', that);
-   return iterator();
+   return curr;
 }
 
 //
@@ -72,6 +81,13 @@ listmap<key_t,mapped_t,less_t>::find (const key_type& that) {
 template <typename key_t, typename mapped_t, class less_t>
 typename listmap<key_t,mapped_t,less_t>::iterator
 listmap<key_t,mapped_t,less_t>::erase (iterator position) {
+   if(!empty()) {
+     position.get()->next->prev = position.get()->prev;
+     position.get()->prev->next = position.get()->next;
+   }
+   delete(position.get()->next);
+   delete(position.get()->prev);
+   delete(position.get());
    DEBUGF ('l', &*position);
    return iterator();
 }
