@@ -61,7 +61,11 @@ void catfile(istream& infile, const string& filename) {
     }else if (regex_search (line, result, trimmed_regex)) {
        cout << "query: \"" << result[1] << "\"" << endl;
        auto it = test.find(result[1]);
-       cout << (*it).second << endl;
+       if(it != test.end() && it!= test.begin()) {
+         cout << "value: \"" << (*it).second << "\"" << endl;
+       } else {
+         cout << "value: \"" << result[1] << "\"not found" << endl;
+       }
     }else {
        assert (false and "This can not happen.");
     }
