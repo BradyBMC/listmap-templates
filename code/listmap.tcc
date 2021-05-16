@@ -44,7 +44,7 @@ listmap<key_t,mapped_t,less_t>::insert (const value_type& pair) {
      }
    }
    for(;;) {
-     if(curr != begin() && curr != end() && !lesser(curr.get()->value.first,pair.first)) {
+     if(curr != end() && !lesser(curr.get()->value.first,pair.first)) {
        node *n_ptr = new node(curr.get(),curr.get()->prev,pair);
        curr.get()->prev->next = n_ptr;
        curr.get()->prev = n_ptr;
@@ -53,9 +53,9 @@ listmap<key_t,mapped_t,less_t>::insert (const value_type& pair) {
      }
      ++curr;
      if(curr == end()) {
-       node *n_ptr = new node(curr.get()->next,curr.get(),pair);
-       curr.get()->next->prev = n_ptr;
-       curr.get()->next = n_ptr;
+       node *n_ptr = new node(curr.get(),curr.get()->prev,pair);
+       curr.get()->prev->next = n_ptr;
+       curr.get()->prev = n_ptr;
        cout << "put in back" << endl;
        return n_ptr;
      }
@@ -81,10 +81,11 @@ listmap<key_t,mapped_t,less_t>::find (const key_type& that) {
 
 template <typename key_t, typename mapped_t, class less_t>
 void listmap<key_t,mapped_t,less_t>::find_key(const key_type& that) {
+  cout << "Print all pair for value" << endl;
   iterator curr = begin();
   while(curr != end()) {
     if(curr.get()->value.second == that) {
-      cout << curr.get()->value.first << endl;
+      cout << curr.get()->value << endl;
     }
     ++curr;
   }
@@ -99,12 +100,11 @@ void listmap<key_t,mapped_t,less_t>::find_key(const key_type& that) {
 template <typename key_t, typename mapped_t, class less_t>
 typename listmap<key_t,mapped_t,less_t>::iterator
 listmap<key_t,mapped_t,less_t>::erase (iterator position) {
-   if(!empty()) {
-     position.get()->next->prev = position.get()->prev;
-     position.get()->prev->next = position.get()->next;
-   }
-   delete(position.get()->next);
-   delete(position.get()->prev);
+   position.get()->next->prev = position.get()->prev;
+   position.get()->prev->next = position.get()->next;
+   cout << "here"<< endl;
+   position.get()->next = nullptr;
+   position.get()->prev = nullptr;
    delete(position.get());
    DEBUGF ('l', &*position);
    return iterator();

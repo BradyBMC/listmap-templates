@@ -55,16 +55,30 @@ void catfile(istream& infile, const string& filename) {
     }else if (regex_search (line, result, key_value_regex)) {
        cout << "key  : \"" << result[1] << "\"" << endl;
        cout << "value: \"" << result[2] << "\"" << endl;
-       str_str_pair pair (result[1], result[2]);
-       cout << pair << endl;
-       test.insert(pair);
+       if(result[1] == "" && result[2] == "") {
+         for(auto it = test.begin();it != test.end();++it) {
+           cout << *it << endl;
+         }
+       } else if(result[1] == "") {
+         test.find_key(result[2]);
+       } else if(result[2] == "") {
+         auto it = test.find(result[1]);
+         if(it != test.end()) {
+           cout << "erase : " << result[1] << endl;
+           test.erase(it);
+         }
+       } else {
+         str_str_pair pair (result[1], result[2]);
+         cout << pair << endl;
+         test.insert(pair);
+       }
     }else if (regex_search (line, result, trimmed_regex)) {
        cout << "query: \"" << result[1] << "\"" << endl;
        auto it = test.find(result[1]);
-       if(it != test.end() && it!= test.begin()) {
+       if(it != test.end()) {
          cout << "value: \"" << (*it).second << "\"" << endl;
        } else {
-         cout << "value: \"" << result[1] << "\"not found" << endl;
+         cout << result[1] << ": key not found" << endl;
        }
     }else {
        assert (false and "This can not happen.");
@@ -94,63 +108,7 @@ int main (int argc, char** argv) {
       }
     }
   }
-
-
-
-   /*
-   sys_info::execname (argv[0]);
-   scan_options (argc, argv);
-   
-   regex comment_regex {R"(^\s*(#.*)?$)"};
-   regex key_value_regex {R"(^\s*(.*?)\s*=\s*(.*?)\s*$)"};
-   regex trimmed_regex {R"(^\s*([^=]+?)\s*$)"};
-   int run = 0;
-   str_str_map test;
-   for (;;) {
-      string line;
-      getline (cin, line);
-      if (cin.eof()) break;
-      cout << "input: \"" << line << "\"" << endl;
-      smatch result;
-      if (regex_search (line, result, comment_regex)) {
-         cout << "Comment or empty line." << endl;
-      }else if (regex_search (line, result, key_value_regex)) {
-         cout << "key  : \"" << result[1] << "\"" << endl;
-         cout << "value: \"" << result[2] << "\"" << endl;
-         string temp = result[1];
-         string temp2= result[2];
-         str_str_pair pair (result[1], result[2]);
-         cout << pair << endl;
-         test.insert(pair);
-      }else if (regex_search (line, result, trimmed_regex)) {
-         cout << "query: \"" << result[1] << "\"" << endl;
-      }else {
-         assert (false and "This can not happen.");
-      }
-      run++;
-      if(run == 3) break;
-   }
-   */
-
-   /*
-   str_str_map test;
-   cout << test << endl;
-   for (char** argp = &argv[optind]; argp != &argv[argc]; ++argp) {
-      str_str_pair pair (*argp, to_string<int> (argp - argv));
-      cout << "Before insert: " << pair << endl;
-      test.insert (pair);
-   }
-
-   cout << test.empty() << endl;
-   for (str_str_map::iterator itor = test.begin();
-        itor != test.end(); ++itor) {
-      cout << "During iteration: " << *itor << endl;
-   }
-
-   str_str_map::iterator itor = test.begin();
-   test.erase (itor);
-   */
-   cout << "EXIT_SUCCESS" << endl;
-   return status;
+  cout << "EXIT_SUCCESS" << endl;
+  return status;
 }
 
