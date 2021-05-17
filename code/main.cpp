@@ -42,6 +42,7 @@ void catfile(istream& infile, const string& filename) {
   regex trimmed_regex {R"(^\s*([^=]+?)\s*$)"};
 
   str_str_map test;
+  size_t cnt{1};
 
   cout << filename << endl;
   for(;;) {
@@ -89,8 +90,6 @@ void catfile(istream& infile, const string& filename) {
 }
 
 int main (int argc, char** argv) {
-
-
 
   int status = 0;
   string progname(basename(argv[0]));
