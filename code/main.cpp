@@ -45,7 +45,6 @@ void catfile(istream& infile, const string& filename) {
   regex trimmed_regex {R"(^\s*([^=]+?)\s*$)"};
 
   str_str_map test;
-  size_t cnt{1};
 
   int count = 1;
   for(;;) {
