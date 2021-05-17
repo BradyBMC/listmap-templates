@@ -42,6 +42,7 @@ class listmap {
       ~listmap();
       iterator insert (const value_type&);
       iterator find (const key_type&);
+      void find_key(const key_type& that);
       iterator erase (iterator position);
       iterator begin() { return anchor()->next; }
       iterator end() { return anchor(); }
@@ -68,6 +69,7 @@ class listmap<key_t,mapped_t,less_t>::iterator {
       bool operator== (const iterator& that) const {
          return this->where == that.where;
       }
+      listmap<key_t,mapped_t,less_t>::node* get() {return where;}
       bool operator!= (const iterator& that) const {
          return this->where != that.where;
       }
