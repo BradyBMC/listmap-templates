@@ -49,8 +49,10 @@ void catfile(istream& infile, const string& filename) {
   cout << filename << endl;
   for(;;) {
     string line;
-    getline (cin, line);
-    if (infile.eof()) break;
+    getline (infile, line);
+    if (infile.eof()){
+       break;
+    }
     cout << "input: \"" << line << "\"" << endl;
     smatch result;
     if (regex_search (line, result, comment_regex)) {
