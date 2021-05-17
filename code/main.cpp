@@ -8,6 +8,9 @@
 #include <regex>
 #include <cassert>
 #include <fstream>
+#include <vector>
+#include <string>
+#include <cstring>
 
 
 using namespace std;
@@ -44,42 +47,39 @@ void catfile(istream& infile, const string& filename) {
   str_str_map test;
   size_t cnt{1};
 
-  cout << filename << endl;
+  int count = 1;
   for(;;) {
     string line;
     getline (infile, line);
     if (infile.eof()){
        break;
     }
-    cout << "input: \"" << line << "\"" << endl;
+    cout << filename << ": "<< count++ << ": "  << line << endl;
     smatch result;
     if (regex_search (line, result, comment_regex)) {
-       cout << "Comment or empty line." << endl;
+       //cout << "Comment or empty line." << endl;
     }else if (regex_search (line, result, key_value_regex)) {
-       cout << "key  : \"" << result[1] << "\"" << endl;
-       cout << "value: \"" << result[2] << "\"" << endl;
        if(result[1] == "" && result[2] == "") {
          for(auto it = test.begin();it != test.end();++it) {
-           cout << *it << endl;
+           cout << (*it).first << " = " << (*it).second << endl;
          }
        } else if(result[1] == "") {
          test.find_key(result[2]);
        } else if(result[2] == "") {
          auto it = test.find(result[1]);
          if(it != test.end()) {
-           cout << "erase : " << result[1] << endl;
+           cout << result[1] << endl;
            test.erase(it);
          }
        } else {
          str_str_pair pair (result[1], result[2]);
-         cout << pair << endl;
+         cout << pair.first << " = " << pair.second << endl;
          test.insert(pair);
        }
     }else if (regex_search (line, result, trimmed_regex)) {
-       cout << "query: \"" << result[1] << "\"" << endl;
        auto it = test.find(result[1]);
        if(it != test.end()) {
-         cout << "value: \"" << (*it).second << "\"" << endl;
+         cout << result[1] << " = " << (*it).second << endl;
        } else {
          cout << result[1] << ": key not found" << endl;
        }
@@ -90,7 +90,6 @@ void catfile(istream& infile, const string& filename) {
 }
 
 int main (int argc, char** argv) {
-
   int status = 0;
   string progname(basename(argv[0]));
   vector<string> filenames(&argv[1], &argv[argc]);
@@ -109,7 +108,6 @@ int main (int argc, char** argv) {
       }
     }
   }
-  cout << "EXIT_SUCCESS" << endl;
   return status;
 }
 
