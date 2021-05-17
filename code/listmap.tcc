@@ -15,7 +15,8 @@
 template <typename key_t, typename mapped_t, class less_t>
 listmap<key_t,mapped_t,less_t>::~listmap() {
    while(begin()!=end()) {
-     erase(++begin());
+     erase(begin());
+     ++begin();
    }
    //Idk if it has to remove anchor?"
    DEBUGF ('l', reinterpret_cast<const void*> (this));
