@@ -34,13 +34,13 @@ listmap<key_t,mapped_t,less_t>::insert (const value_type& pair) {
      node *n_ptr = new node(curr.get(),curr.get(),pair);
      curr.get()->next = n_ptr;
      curr.get()->prev = n_ptr;
-     cout << "empty" << endl;
+     //cout << "empty" << endl;
      return n_ptr;
    } else {
      curr = find(pair.first);
      if(curr != end()) {
        curr.get()->value.second = pair.second;
-       cout << "swap value" << endl;
+       //cout << "swap value" << endl;
        return curr.get();
      }
    }
@@ -49,7 +49,7 @@ listmap<key_t,mapped_t,less_t>::insert (const value_type& pair) {
        node *n_ptr = new node(curr.get(),curr.get()->prev,pair);
        curr.get()->prev->next = n_ptr;
        curr.get()->prev = n_ptr;
-       cout << "put in front or middle " << endl;
+       //cout << "put in front or middle " << endl;
        return n_ptr;
      }
      ++curr;
@@ -57,7 +57,7 @@ listmap<key_t,mapped_t,less_t>::insert (const value_type& pair) {
        node *n_ptr = new node(curr.get(),curr.get()->prev,pair);
        curr.get()->prev->next = n_ptr;
        curr.get()->prev = n_ptr;
-       cout << "put in back" << endl;
+       //cout << "put in back" << endl;
        return n_ptr;
      }
    }
@@ -82,11 +82,11 @@ listmap<key_t,mapped_t,less_t>::find (const key_type& that) {
 
 template <typename key_t, typename mapped_t, class less_t>
 void listmap<key_t,mapped_t,less_t>::find_key(const key_type& that) {
-  cout << "Print all pair for value" << endl;
+  //cout << "Print all pair for value" << endl;
   iterator curr = begin();
   while(curr != end()) {
     if(curr.get()->value.second == that) {
-      cout << curr.get()->value << endl;
+      cout << curr.get()->value.first << " = " << curr.get()->value.second  << endl;
     }
     ++curr;
   }
@@ -103,7 +103,6 @@ typename listmap<key_t,mapped_t,less_t>::iterator
 listmap<key_t,mapped_t,less_t>::erase (iterator position) {
    position.get()->next->prev = position.get()->prev;
    position.get()->prev->next = position.get()->next;
-   cout << "here"<< endl;
    position.get()->next = nullptr;
    position.get()->prev = nullptr;
    delete(position.get());
