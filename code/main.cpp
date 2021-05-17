@@ -8,6 +8,9 @@
 #include <regex>
 #include <cassert>
 #include <fstream>
+#include <vector>
+#include <string>
+#include <cstring>
 
 
 using namespace std;
@@ -87,9 +90,6 @@ void catfile(istream& infile, const string& filename) {
 }
 
 int main (int argc, char** argv) {
-
-
-
   int status = 0;
   string progname(basename(argv[0]));
   vector<string> filenames(&argv[1], &argv[argc]);
