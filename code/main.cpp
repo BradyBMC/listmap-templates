@@ -57,8 +57,7 @@ void catfile(istream& infile, const string& filename) {
     cout << filename << ": "<< count++ << ": "  << line << endl;
     smatch result;
     if (regex_search (line, result, comment_regex)) {
-       //cout << "Comment or empty line." << endl;
-    }else if (regex_search (line, result, key_value_regex)) {
+    } else if (regex_search (line, result, key_value_regex)) {
        if(result[1] == "" && result[2] == "") {
          for(auto it = test.begin();it != test.end();++it) {
            cout << (*it).first << " = " << (*it).second << endl;
