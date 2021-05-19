@@ -40,12 +40,10 @@ void scan_options (int argc, char** argv) {
    }
 }
 
-void catfile(istream& infile, const string& filename) {
+void catfile(istream& infile,const string& filename,str_str_map& test){
   regex comment_regex {R"(^\s*(#.*)?$)"};
   regex key_value_regex {R"(^\s*(.*?)\s*=\s*(.*?)\s*$)"};
   regex trimmed_regex {R"(^\s*([^=]+?)\s*$)"};
-
-  str_str_map test;
 
   int count = 1;
   for(;;) {
@@ -89,12 +87,13 @@ void catfile(istream& infile, const string& filename) {
 }
 
 int main (int argc, char** argv) {
+  str_str_map test;
   int status = 0;
   string progname(basename(argv[0]));
   vector<string> filenames(&argv[1], &argv[argc]);
   if(filenames.size()==0) filenames.push_back("-");
   for(const auto& filename: filenames) {
-    if(filename == "-") catfile(cin,filename);
+    if(filename == "-") catfile(cin,filename,test);
     else {
       ifstream infile (filename);
       if(infile.fail()) {
@@ -102,7 +101,7 @@ int main (int argc, char** argv) {
         cerr << progname << ": " << filename <<": " 
         << strerror(errno) << endl;
       } else {
-        catfile(infile,filename);
+        catfile(infile,filename,test);
         infile.close();
       }
     }
