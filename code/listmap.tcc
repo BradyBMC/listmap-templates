@@ -81,7 +81,8 @@ void listmap<key_t,mapped_t,less_t>::find_key(const key_type& that) {
   iterator curr = begin();
   while(curr != end()) {
     if(curr.get()->value.second == that) {
-      cout << curr.get()->value.first << " = " << curr.get()->value.second  << endl;
+      cout << curr.get()->value.first << " = " 
+      << curr.get()->value.second  << endl;
     }
     ++curr;
   }
