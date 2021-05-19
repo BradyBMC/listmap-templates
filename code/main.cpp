@@ -1,4 +1,5 @@
 // $Id: main.cpp,v 1.13 2021-02-01 18:58:18-08 - - $
+// Brady Chan, Evan Clark
 
 #include <cstdlib>
 #include <exception>

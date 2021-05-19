@@ -1,4 +1,5 @@
 // $Id: xless.h,v 1.3 2014-04-24 18:02:55-07 - - $
+// Brady Chan, Evan Clark
 
 #ifndef __XLESS_H__
 #define __XLESS_H__
